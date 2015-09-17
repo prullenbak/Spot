@@ -25,6 +25,14 @@ class TestSpot extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Spot\Spot',$spot);
 
 
+
+        $spot = Spot::fromExif($this->getTestExif());
+        $this->assertInstanceOf('Spot\Spot',$spot);
+
+        $this->assertEquals('51.127603',$spot->latitude());
+        $this->assertEquals('5.890669',$spot->longitude());
+
+
     }
 
     public function testCalclulateDistance()
@@ -60,6 +68,25 @@ class TestSpot extends PHPUnit_Framework_TestCase
     }
 
 
+    private function getTestExif()
+    {
+        return [
+            'GPSLatitudeRef' => 'N',
+            'GPSLatitude' => [
+                0 => '51/1',
+                1 => '7/1',
+                2 => '3937/100'
+            ],
+            'GPSLongitudeRef' => 'E',
+            'GPSLongitude' => [
+                0 => '5/1',
+                1 => '53/1',
+                2 => '2641/100'
+            ]
+        ];
+
+
+    }
 
 }
 ?>

@@ -64,6 +64,48 @@ class Spot
         return new static($latDeg, $lonDeg);
     }
 
+
+    public static function fromExif($exif)
+    {
+
+        if (! array_key_exists('GPSLatitudeRef', $exif)) {
+            return new static();
+        }
+
+        $lat = $exif['GPSLatitude'];
+        $latref = $exif['GPSLatitudeRef'];
+
+        $latdegrees = $lat[0];
+        $parts = explode('/', $latdegrees);
+        $latdegrees = $parts[0] / $parts[1];
+
+        $latminutes = $lat[1];
+        $parts = explode('/', $latminutes);
+        $latminutes = $parts[0] / $parts[1];
+
+        $latseconds = $lat[2];
+        $parts = explode('/', $latseconds);
+        $latseconds = $parts[0] / $parts[1];
+
+        $lon = $exif['GPSLongitude'];
+        $lonref = $exif['GPSLongitudeRef'];
+
+        $londegrees = $lon[0];
+        $parts = explode('/', $londegrees);
+        $londegrees = $parts[0] / $parts[1];
+
+        $lonminutes = $lon[1];
+        $parts = explode('/', $lonminutes);
+        $lonminutes = $parts[0] / $parts[1];
+
+        $lonseconds = $lon[2];
+        $parts = explode('/', $lonseconds);
+        $lonseconds = $parts[0] / $parts[1];
+
+        return static::fromDMS("{$latref}{$latdegrees}° {$latminutes} {$latseconds}","{$lonref}{$londegrees}° {$lonminutes} {$lonseconds}");
+
+    }
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////// GETTERS /////////////////////////////
     ///////////////////////////////////////////////////////////////////
