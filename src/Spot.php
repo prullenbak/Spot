@@ -64,7 +64,13 @@ class Spot
         return new static($latDeg, $lonDeg);
     }
 
-
+    /**
+    * Create a Spot instance using an array of exif-data (from an image)
+    *
+    * @param array $exif
+    *
+    * @return static
+    */
     public static function fromExif($exif)
     {
 
