@@ -64,6 +64,39 @@ class Spot
         return new static($latDeg, $lonDeg);
     }
 
+
+    /**
+    * Create a Spot instance by taking the center of a list of other spot-objects
+    *
+    * @param array $spots - an array of Spot objects
+    *
+    * @return static
+    */
+    public static function center($spots)
+    {
+
+        $lat = 0.0;
+        $lon = 0.0;
+        $count = 0;
+
+        if (!count($spots)) {
+            return new static();
+        }
+
+        foreach ($spots as $spot) {
+            if ($spot->hasLocation()) {
+                $count++;
+                $lat += $spot->latitude();
+                $lon += $spot->longitude();
+            }
+        }
+
+        $lat /= $count;
+        $lon /= $count;
+
+        return new static($lat,$lon);
+    }
+
     /**
     * Create a Spot instance using an array of exif-data (from an image)
     *
@@ -134,6 +167,10 @@ class Spot
     public function longitude()
     {
         return $this->lon;
+    }
+
+    public function hasLocation(){
+      return ($this->lat OR $this->lon);
     }
 
 

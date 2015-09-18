@@ -17,20 +17,30 @@ class TestSpot extends PHPUnit_Framework_TestCase
         $spot = new Spot();
         $this->assertInstanceOf('Spot\Spot', $spot);
 
-        $spot = Spot::fromDM('N51º 12.123','E004º 14.432');
-        $this->assertInstanceOf('Spot\Spot',$spot);
+        $spot1 = Spot::fromDM('N51º 12.123','E004º 14.432');
+        $this->assertInstanceOf('Spot\Spot',$spot1);
 
 
-        $spot = Spot::fromDMS('N51° 12 7.38','E4° 14 25.92');
-        $this->assertInstanceOf('Spot\Spot',$spot);
+        $spot2 = Spot::fromDMS('N51° 12 7.38','E4° 14 25.92');
+        $this->assertInstanceOf('Spot\Spot',$spot2);
 
 
 
-        $spot = Spot::fromExif($this->getTestExif());
-        $this->assertInstanceOf('Spot\Spot',$spot);
+        $spot3 = Spot::fromExif($this->getTestExif());
+        $this->assertInstanceOf('Spot\Spot',$spot3);
 
-        $this->assertEquals('51.127603',$spot->latitude());
-        $this->assertEquals('5.890669',$spot->longitude());
+        $this->assertEquals('51.127603',$spot3->latitude());
+        $this->assertEquals('5.890669',$spot3->longitude());
+
+        $spot4 = Spot::center([$spot3,$spot2]);
+        $this->assertInstanceOf('Spot\Spot',$spot4);
+        $this->assertEquals('51.1648265',$spot4->latitude());
+        $this->assertEquals('5.065601',$spot4->longitude());
+
+        //center ignores empty coordinates
+        $spot5 = Spot::center([new Spot(),$spot4]);
+        $this->assertEquals($spot4->latitude(),$spot5->latitude());
+        $this->assertEquals($spot4->longitude(),$spot5->longitude());
 
 
     }
